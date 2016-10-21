@@ -36,6 +36,8 @@ import android.widget.ListView;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
+import java.util.zip.Inflater;
+
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.
  */
@@ -249,6 +251,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data == null) {
+            //TODO
+            if (!new Utility().isConnected(getActivity())) {
+                mListView.setEmptyView(getView().findViewById(R.id.list_view_forecast_empty_no_connectivity));
+            }
+        }
         mForecastAdapter.swapCursor(data);
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
